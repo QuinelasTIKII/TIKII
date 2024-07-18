@@ -200,6 +200,21 @@
     td:nth-child(4) .image-text-container {
         justify-content: flex-end;
     }
+.btn-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    z-index: 1001; /* Asegura que esté encima de las promociones */
+}
+
 .promotions-container {
     display: none;
     position: fixed;
@@ -223,6 +238,7 @@
 <body>
 <div id="promotions-container" class="promotions-container">
     <div>
+        <button id="close-promotions" class="btn-close"><i class="fas fa-times"></i></button>
         <button id="promotion-1" class="btn btn-quiniela" onclick="selectPromotion(1)">1 x $30</button>
         <button id="promotion-3" class="btn btn-quiniela" onclick="selectPromotion(3)">3 x $70</button>
         <button id="promotion-5" class="btn btn-quiniela" onclick="selectPromotion(5)">5 x $100</button>
@@ -428,6 +444,7 @@ var costoTotal = 0; // Costo inicial de la quiniela
 var quinielasPermitidas = 0; // Cantidad de quinielas permitidas según la promoción seleccionada
 var quinielasAgregadas = 0; // Contador de quinielas agregadas al historial
 var promocionActiva = false; // Variable para controlar si hay una promoción activa
+var promocionSeleccionada = false; // Variable para controlar si hay una promoción seleccionada
 
 function selectCell(cell) {
     var row = cell.parentNode;
@@ -463,20 +480,26 @@ function sendWhatsAppMessage() {
         return;
     }
 
+    // Verificar si la cantidad de quinielas cumple con la promoción activa
+    if (promocionActiva && quinielasAgregadas < quinielasPermitidas) {
+        alert("Debe agregar " + quinielasPermitidas + " quinielas para completar la promoción seleccionada.");
+        return;
+    }
+
     var historialText = "";
     historialItems.forEach(function(item, index) {
         historialText += item.textContent.replace("❌", "").trim() + "\n";
     });
     var costoTotal = document.getElementById("total").textContent;
     var phoneNumber = "tu_numero_de_whatsapp";
-    var whatsappUrl = "https://wa.me/" + 6481690280 + "/?text=" + encodeURIComponent(historialText + "\n" + costoTotal);
+    var whatsappUrl = "https://wa.me/" + 3336263675 + "/?text=" + encodeURIComponent(historialText + "\n" + costoTotal);
     window.open(whatsappUrl, "_blank");
 }
 
 function sendWhatsAppMessageInformes() {
     var mensaje = "!!!QUIERO MAS INFORMES SOBRE LAS QUINIELAS!!!⚽😄";
     var phoneNumber = "tu_numero_de_whatsapp";
-    var whatsappUrl = "https://wa.me/" + 6481690280 + "/?text=" + encodeURIComponent(mensaje);
+    var whatsappUrl = "https://wa.me/" + 3336263675 + "/?text=" + encodeURIComponent(mensaje);
     window.open(whatsappUrl, "_blank");
 }
 
@@ -500,7 +523,12 @@ function agregarQuiniela() {
         alert("Debe ingresar su nombre/apodo y el total de goles antes de agregar más quinielas.");
         return;
     }
-   // Verificar que se haya seleccionado una opción en cada fila de la tabla
+
+    // Si no hay promoción activa, calcular el costo total basado en el número de quinielas agregadas
+    if (!promocionActiva) {
+        costoTotal += 30; // Costo por quiniela sin promoción
+    }
+  // Verificar que se haya seleccionado una opción en cada fila de la tabla
     var table = document.getElementsByTagName("table")[0];
     var rows = table.getElementsByTagName("tr");
     for (var i = 1; i < rows.length; i++) {
@@ -510,11 +538,6 @@ function agregarQuiniela() {
             return;
         }
     }
-    // Si no hay promoción activa, calcular el costo total basado en el número de quinielas agregadas
-    if (!promocionActiva) {
-        costoTotal += 30; // Costo por quiniela sin promoción
-    }
-
     // Si hay promoción activa, verificar límite de quinielas según la promoción seleccionada
     if (promocionActiva && quinielasPermitidas > 0 && quinielasAgregadas >= quinielasPermitidas) {
         alert("Ya ha alcanzado el límite de quinielas permitidas por esta promoción.");
@@ -590,6 +613,7 @@ function selectPromotion(quantity) {
 
     // Actualizar la cantidad de quinielas permitidas y el costo total
     quinielasPermitidas = quantity; // Establecer la cantidad de quinielas permitidas según la promoción seleccionada
+    promocionSeleccionada = true; // Indicar que se ha seleccionado una promoción
     var precioPromocion = 0;
 
     // Calcular el precio de la promoción seleccionada
@@ -619,6 +643,12 @@ function selectPromotion(quantity) {
 }
 
 function acceptPromotion() {
+    // Verificar si hay una promoción seleccionada
+    if (!promocionSeleccionada) {
+        alert("Debe seleccionar una promoción antes de aceptar.");
+        return;
+    }
+
     // Verificar si ya hay una promoción activa y quinielas agregadas que superen la promoción actual
     if (promocionActiva && quinielasAgregadas > quinielasPermitidas) {
         alert("No puedes aceptar una nueva promoción si ya has agregado más quinielas de las permitidas por la promoción anterior.");
@@ -642,6 +672,7 @@ function acceptPromotion() {
 
     // Limpiar selecciones después de aceptar la promoción
     limpiarSeleccion();
+    promocionSeleccionada = false; // Resetear la selección de promoción
 }
 
 // Función para calcular el costo basado en la cantidad de quinielas y la promoción activa
@@ -664,6 +695,9 @@ function calcularCostoPromocion(quantity) {
     }
     return 30 * quantity; // Calcular el costo sin promoción
 }
+document.getElementById('close-promotions').addEventListener('click', function() {
+    document.getElementById('promotions-container').classList.remove('active');
+});
 </script>
 </body>
 </html>
