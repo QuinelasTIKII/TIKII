@@ -233,6 +233,50 @@
 .promotions-container.active {
     display: block;
 }
+.admin-panel {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 20px;
+    max-width: 400px;
+    margin: auto;
+}
+
+.admin-panel h2 {
+    text-align: center;
+    color: #333;
+}
+
+.admin-panel form {
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-panel label {
+    margin-top: 10px;
+}
+
+.admin-panel input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.admin-panel button {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.admin-panel button:hover {
+    background-color: #45a049;
+}
 </style>
 </head>
 <body>
@@ -698,6 +742,58 @@ function calcularCostoPromocion(quantity) {
 document.getElementById('close-promotions').addEventListener('click', function() {
     document.getElementById('promotions-container').classList.remove('active');
 });
+function updateTeam() {
+    var index = document.getElementById("team-index").value;
+    var name = document.getElementById("team-name").value;
+    var logo = document.getElementById("team-logo").value;
+
+    if (index < 1 || index > 18) {
+        alert("El índice del equipo debe estar entre 1 y 18.");
+        return;
+    }
+
+    var row = document.querySelectorAll("table tr")[index];
+    if (!row) {
+        alert("Fila no encontrada.");
+        return;
+    }
+
+    var cells = row.getElementsByTagName("td");
+    if (cells.length < 2) {
+        alert("Fila inválida.");
+        return;
+    }
+
+    // Actualizar el nombre del equipo
+    var teamNameSpan = cells[1].querySelector("span");
+    if (teamNameSpan) {
+        teamNameSpan.textContent = name;
+    }
+
+    // Actualizar el logo del equipo
+    var teamLogoImg = cells[1].querySelector("img");
+    if (teamLogoImg) {
+        teamLogoImg.src = logo;
+    }
+
+    alert("Equipo actualizado con éxito.");
+}
 </script>
 </body>
 </html>
+<!-- Panel de administración -->
+<div class="admin-panel">
+    <h2>Panel de Administración</h2>
+    <form id="admin-form">
+        <label for="team-index">Selecciona el equipo (índice):</label>
+        <input type="number" id="team-index" min="1" max="18" placeholder="1" required>
+        
+        <label for="team-name">Nombre del equipo:</label>
+        <input type="text" id="team-name" placeholder="Nombre del equipo" required>
+
+        <label for="team-logo">URL del logo del equipo:</label>
+        <input type="text" id="team-logo" placeholder="URL del logo del equipo" required>
+
+        <button type="button" onclick="updateTeam()">Actualizar equipo</button>
+    </form>
+</div>
