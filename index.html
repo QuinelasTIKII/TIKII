@@ -486,6 +486,16 @@
     <form id="quinielaForm" action="http://localhost:5000/api/quiniela/submit" method="POST">
     <!-- campos del formulario -->
 </form>
+    <form id="quiniela-form" action="http://localhost:5000/api/quiniela" method="POST">
+  <input type="text" name="name" placeholder="Nombre" required>
+  <select name="match1" required>
+    <option value="E">Empate</option>
+    <option value="L">Local</option>
+    <option value="V">Visitante</option>
+  </select>
+  <!-- Añadir más campos de predicción aquí -->
+  <button type="submit">Enviar Quiniela</button>
+</form>
 <script>
 var costoTotal = 0; // Costo inicial de la quiniela
 var quinielasPermitidas = 0; // Cantidad de quinielas permitidas según la promoción seleccionada
@@ -810,6 +820,7 @@ function updateTeam() {
         console.error('Error:', err);
     }
 });
+    <script src="formHandler.js"></script>
 </script>
 </body>
 </html>
