@@ -698,6 +698,30 @@ function calcularCostoPromocion(quantity) {
 document.getElementById('close-promotions').addEventListener('click', function() {
     document.getElementById('promotions-container').classList.remove('active');
 });
+     async function submitQuiniela() {
+    const nombre = document.getElementById('nombre').value;
+    const resultados = [
+      document.getElementById('resultado1').value,
+      document.getElementById('resultado2').value,
+      // Agrega más resultados según sea necesario
+    ];
+    const puntos = document.getElementById('puntos').value;
+    const total = document.getElementById('total').value;
+
+    const response = await fetch('http://localhost:3000/save-quiniela', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ nombre, resultados, puntos, total })
+    });
+
+    if (response.ok) {
+      alert('Quiniela guardada con éxito');
+    } else {
+      alert('Error al guardar quiniela');
+    }
+  }
 </script>
 </body>
 </html>
