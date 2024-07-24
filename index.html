@@ -697,41 +697,6 @@ function calcularCostoPromocion(quantity) {
 document.getElementById('close-promotions').addEventListener('click', function() {
     document.getElementById('promotions-container').classList.remove('active');
 });
-    function agregarQuiniela() {
-    var selectedCells = document.querySelectorAll(".selected");
-    var nombreUsuario = document.getElementById("nombre-usuario").value;
-    var totalGoles = document.getElementById("total-goles").value;
-    
-    if (!nombreUsuario || selectedCells.length === 0 || !totalGoles) {
-        alert("Por favor, complete todos los campos y seleccione al menos una opción.");
-        return;
-    }
-
-    var resultados = Array.from(selectedCells).map(cell => cell.textContent.trim());
-
-    var quiniela = {
-        nombre: nombreUsuario,
-        resultados: resultados,
-        totalGoles: totalGoles
-    };
-
-    // Enviar la quiniela al servidor
-    fetch('http://localhost:3000/guardar-quiniela', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(quiniela)
-    })
-    .then(response => response.text())
-    .then(data => {
-        alert(data);
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Hubo un error al enviar la quiniela.');
-    });
-}
 </script>
 </body>
 </html>
