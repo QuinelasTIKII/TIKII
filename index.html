@@ -483,6 +483,9 @@
 </div>
 <!-- Agregar marca de agua como fondo de la tabla -->
 <img id="watermark" class="watermark" src="quitiki.png" alt="Marca de agua">
+    <form id="quinielaForm" action="http://localhost:5000/api/quiniela/submit" method="POST">
+    <!-- campos del formulario -->
+</form>
 <script>
 var costoTotal = 0; // Costo inicial de la quiniela
 var quinielasPermitidas = 0; // Cantidad de quinielas permitidas según la promoción seleccionada
@@ -778,6 +781,35 @@ function updateTeam() {
 
     alert("Equipo actualizado con éxito.");
 }
+    document.getElementById('quinielaForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.target);
+    const data = {
+        name: formData.get('name'),
+        results: [formData.get('result1'), formData.get('result2'), /* ... otros resultados ... */],
+        points: parseInt(formData.get('points')),
+        total: parseInt(formData.get('total'))
+    };
+
+    try {
+        const response = await fetch('http://localhost:5000/api/quiniela/submit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+            alert('Quiniela enviada exitosamente');
+        } else {
+            alert('Error al enviar la quiniela');
+        }
+    } catch (err) {
+        console.error('Error:', err);
+    }
+});
 </script>
 </body>
 </html>
