@@ -523,32 +523,6 @@ function agregarQuiniela() {
         alert("Debe ingresar su nombre/apodo y el total de goles antes de agregar más quinielas.");
         return;
     }
-      var resultados = Array.from(selectedCells).map(cell => cell.textContent.trim());
-
-    var quiniela = {
-        nombre: nombreUsuario,
-        resultados: resultados,
-        totalGoles: totalGoles
-    };
-
-    // Enviar la quiniela al servidor
-    fetch('http://localhost:3000/guardar-quiniela', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(quiniela)
-    })
-    .then(response => response.text())
-    .then(data => {
-        alert(data);
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Hubo un error al enviar la quiniela.');
-    });
-}
-
     // Si no hay promoción activa, calcular el costo total basado en el número de quinielas agregadas
     if (!promocionActiva) {
         costoTotal += 30; // Costo por quiniela sin promoción
